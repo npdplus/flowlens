@@ -136,6 +136,48 @@ const inlineSafeComputedStyles = (sourceRoot: Element, cloneRoot: Element): void
   }
 };
 
+const normalizeExportEdgeGeometry = (
+  cloneRoot: HTMLElement,
+  width: number,
+  height: number,
+): void => {
+  const edgeLayer = cloneRoot.querySelector<HTMLElement>('.react-flow__edges');
+  if (edgeLayer === null) return;
+
+  // React Flow's live edge layer intentionally relies on overflow-visible SVGs whose
+  // computed layout can report a zero-sized parent and the SVG default 300x150 viewport.
+  // Those computed pixel dimensions become destructive once they are inlined into a
+  // standalone export. Expand the cloned edge layer and each direct SVG child to the
+  // full workflow bounds so path coordinates and edge-label transforms keep the same
+  // coordinate system used by the nodes.
+  edgeLayer.style.position = 'absolute';
+  edgeLayer.style.top = '0';
+  edgeLayer.style.left = '0';
+  edgeLayer.style.right = 'auto';
+  edgeLayer.style.bottom = 'auto';
+  edgeLayer.style.width = `${width}px`;
+  edgeLayer.style.height = `${height}px`;
+  edgeLayer.style.overflow = 'visible';
+
+  for (const child of Array.from(edgeLayer.children)) {
+    if (child.namespaceURI !== SVG_NAMESPACE || child.localName !== 'svg') continue;
+    const svg = child as SVGSVGElement;
+    svg.setAttribute('width', `${width}`);
+    svg.setAttribute('height', `${height}`);
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.style.position = 'absolute';
+    svg.style.top = '0';
+    svg.style.left = '0';
+    svg.style.right = 'auto';
+    svg.style.bottom = 'auto';
+    svg.style.width = `${width}px`;
+    svg.style.height = `${height}px`;
+    svg.style.transform = 'none';
+    svg.style.transformOrigin = '0 0';
+    svg.style.overflow = 'visible';
+  }
+};
+
 const createStandaloneSvg = (
   surface: HTMLElement,
   model: FlowLensRendererModel,
@@ -161,6 +203,7 @@ const createStandaloneSvg = (
   clone.style.transform = 'none';
   clone.style.transformOrigin = '0 0';
   clone.style.overflow = 'visible';
+  normalizeExportEdgeGeometry(clone, model.bounds.width, model.bounds.height);
 
   const width = Math.ceil(model.bounds.width + FLOWLENS_EXPORT_PADDING * 2);
   const height = Math.ceil(model.bounds.height + FLOWLENS_EXPORT_PADDING * 2);
