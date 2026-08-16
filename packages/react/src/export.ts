@@ -136,6 +136,19 @@ const inlineSafeComputedStyles = (sourceRoot: Element, cloneRoot: Element): void
   }
 };
 
+const preserveNestedSvgNamespaces = (cloneRoot: HTMLElement): void => {
+  for (const svg of Array.from(cloneRoot.querySelectorAll<SVGSVGElement>('svg'))) {
+    if (svg.namespaceURI === SVG_NAMESPACE) {
+      // The clone originated in an HTML document, where SVG namespace membership is
+      // implicit and outerHTML does not need to emit xmlns. The standalone artifact is
+      // XML, however, and these SVGs sit below an XHTML foreignObject container. Without
+      // an explicit xmlns declaration they are reparsed as XHTML elements and connector
+      // paths disappear when the exported SVG is loaded as an image.
+      svg.setAttribute('xmlns', SVG_NAMESPACE);
+    }
+  }
+};
+
 const normalizeExportEdgeGeometry = (
   cloneRoot: HTMLElement,
   width: number,
@@ -204,6 +217,7 @@ const createStandaloneSvg = (
   clone.style.transformOrigin = '0 0';
   clone.style.overflow = 'visible';
   normalizeExportEdgeGeometry(clone, model.bounds.width, model.bounds.height);
+  preserveNestedSvgNamespaces(clone);
 
   const width = Math.ceil(model.bounds.width + FLOWLENS_EXPORT_PADDING * 2);
   const height = Math.ceil(model.bounds.height + FLOWLENS_EXPORT_PADDING * 2);
