@@ -117,6 +117,17 @@ const inlineSafeComputedStyles = (sourceRoot: Element, cloneRoot: Element): void
     for (let propertyIndex = 0; propertyIndex < computed.length; propertyIndex += 1) {
       const property = computed.item(propertyIndex);
       if (property.length === 0) continue;
+      // SVG transform presentation attributes (for example React Flow edge-label wrappers)
+      // must remain authoritative in the standalone export. Inlining the computed CSS
+      // `transform: none` would override the cloned `transform="translate(...)"` attribute
+      // and collapse labels to the SVG origin.
+      if (
+        property === 'transform' &&
+        source.namespaceURI === SVG_NAMESPACE &&
+        source.hasAttribute('transform')
+      ) {
+        continue;
+      }
       const value = computed.getPropertyValue(property);
       if (!isSafeExportStyleValue(value)) continue;
       styleText += `${property}:${value};`;
