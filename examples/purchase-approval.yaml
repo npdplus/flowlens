@@ -1,0 +1,47 @@
+schemaVersion: '0.1'
+id: purchase-approval
+name: Purchase Approval
+description: Synthetic purchase approval with approval and rejection terminal paths.
+steps:
+  - id: request
+    label: Submit purchase request
+    type: start
+    status: success
+  - id: manager
+    label: Manager Approval
+    type: decision
+    status: active
+  - id: finance
+    label: Finance Review
+    type: action
+    status: pending
+  - id: completed
+    label: Purchase approved
+    type: end
+    status: success
+  - id: rejected
+    label: Purchase rejected
+    type: end
+    status: failed
+transitions:
+  - id: submit
+    source: request
+    target: manager
+    label: Submitted
+  - id: manager-approved
+    source: manager
+    target: finance
+    label: Approved
+    condition: 'amount < 5000 or managerOverride == true'
+  - id: manager-rejected
+    source: manager
+    target: rejected
+    label: Rejected
+    condition: 'approved == false'
+  - id: finance-approved
+    source: finance
+    target: completed
+    label: Finance cleared
+metadata:
+  category: example
+  scenario: approval

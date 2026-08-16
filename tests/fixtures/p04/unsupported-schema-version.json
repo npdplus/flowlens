@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "9.9",
+  "name": "Unsupported Schema Version",
+  "steps": [{ "id": "start", "label": "Start" }],
+  "transitions": []
+}

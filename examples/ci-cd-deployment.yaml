@@ -1,0 +1,60 @@
+schemaVersion: '0.1'
+id: ci-cd-deployment
+name: CI/CD Deployment
+description: Synthetic build, test, staging, and deployment workflow.
+steps:
+  - id: commit
+    label: Commit ready
+    type: start
+    status: success
+  - id: build
+    label: Build application
+    type: action
+    status: success
+  - id: tests
+    label: Test gate
+    type: decision
+    status: active
+  - id: staging
+    label: Deploy to staging
+    type: action
+    status: pending
+  - id: production
+    label: Deploy to production
+    type: action
+    status: pending
+  - id: deployed
+    label: Deployment complete
+    type: end
+    status: success
+  - id: failed
+    label: Pipeline failed
+    type: end
+    status: failed
+transitions:
+  - id: build-commit
+    source: commit
+    target: build
+  - id: run-tests
+    source: build
+    target: tests
+  - id: tests-pass
+    source: tests
+    target: staging
+    label: Tests passed
+    condition: 'requiredChecks == passed'
+  - id: tests-fail
+    source: tests
+    target: failed
+    label: Tests failed
+    condition: 'requiredChecks == failed'
+  - id: promote-staging
+    source: staging
+    target: production
+    label: Promote
+  - id: finish-deploy
+    source: production
+    target: deployed
+metadata:
+  category: example
+  scenario: delivery

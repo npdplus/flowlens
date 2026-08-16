@@ -1,0 +1,166 @@
+name: Release Verification
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality-security-performance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.18.0
+          package-manager-cache: false
+
+      - name: Activate pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.4.0 --activate
+          node --version
+          pnpm --version
+
+      - name: Record environment
+        run: |
+          mkdir -p release-evidence
+          {
+            echo "sha=${GITHUB_SHA}"
+            echo "head_sha=${{ github.event.pull_request.head.sha || github.sha }}"
+            echo "runner_os=${RUNNER_OS}"
+            echo "runner_arch=${RUNNER_ARCH}"
+            echo "node=$(node --version)"
+            echo "pnpm=$(pnpm --version)"
+            uname -a
+          } > release-evidence/environment.txt
+
+      - name: Frozen install
+        shell: bash
+        run: |
+          set -o pipefail
+          pnpm install --frozen-lockfile 2>&1 | tee release-evidence/frozen-install.txt
+
+      - name: Lockfile supply-chain policy
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/release/check-lockfile-policy.mjs 2>&1 | tee release-evidence/lockfile-policy.txt
+
+      - name: Secret scan
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/release/scan-secrets.mjs 2>&1 | tee release-evidence/secret-scan.txt
+
+      - name: Formatting
+        shell: bash
+        run: |
+          set -o pipefail
+          pnpm format:check 2>&1 | tee release-evidence/format-check.txt
+
+      - name: Lint
+        shell: bash
+        run: |
+          set -o pipefail
+          pnpm lint 2>&1 | tee release-evidence/lint.txt
+
+      - name: Typecheck
+        shell: bash
+        run: |
+          set -o pipefail
+          pnpm typecheck 2>&1 | tee release-evidence/typecheck.txt
+
+      - name: Unit tests
+        shell: bash
+        run: |
+          set -o pipefail
+          pnpm test 2>&1 | tee release-evidence/unit-tests.txt
+
+      - name: Integration tests
+        shell: bash
+        run: |
+          set -o pipefail
+          pnpm test:integration 2>&1 | tee release-evidence/integration-tests.txt
+
+      - name: Production build
+        shell: bash
+        run: |
+          set -o pipefail
+          pnpm build 2>&1 | tee release-evidence/build.txt
+
+      - name: Representative performance measurements
+        shell: bash
+        run: |
+          set -o pipefail
+          pnpm test:performance 2>&1 | tee release-evidence/performance.txt
+
+      - name: High and critical dependency audit
+        run: pnpm audit --audit-level high --json > release-evidence/audit.json
+
+      - name: Registry signature audit
+        run: pnpm audit signatures --json > release-evidence/signatures.json
+
+      - name: Production dependency licenses
+        run: pnpm licenses list --prod --json > release-evidence/production-licenses.json
+
+      - name: Upload quality evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: p10-quality-security-evidence
+          path: release-evidence/
+          if-no-files-found: warn
+
+  browser-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    needs: quality-security-performance
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.18.0
+          package-manager-cache: false
+
+      - name: Activate pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.4.0 --activate
+
+      - name: Frozen install
+        run: pnpm install --frozen-lockfile
+
+      - name: Install release browsers
+        run: pnpm exec playwright install --with-deps chrome msedge firefox webkit
+
+      - name: Run browser release verification
+        shell: bash
+        run: |
+          mkdir -p release-evidence
+          set -o pipefail
+          pnpm test:release:browsers 2>&1 | tee release-evidence/browser-matrix.txt
+
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: p10-browser-evidence
+          path: release-evidence/
+          if-no-files-found: warn

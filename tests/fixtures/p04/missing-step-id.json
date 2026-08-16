@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "0.1",
+  "name": "Missing Step ID",
+  "steps": [{ "label": "Start" }],
+  "transitions": []
+}

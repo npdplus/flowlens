@@ -1,0 +1,62 @@
+schemaVersion: '0.1'
+id: ai-agent-workflow
+name: AI Agent Workflow
+description: Synthetic agent-style workflow with tool use, validation, and a bounded retry loop.
+steps:
+  - id: request
+    label: Receive task
+    type: start
+    status: success
+  - id: route
+    label: Tool required?
+    type: decision
+    status: active
+  - id: plan
+    label: Plan tool call
+    type: action
+    status: pending
+  - id: tool
+    label: Run synthetic tool
+    type: action
+    status: pending
+  - id: validate
+    label: Validate result
+    type: decision
+    status: pending
+  - id: respond
+    label: Return response
+    type: end
+    status: pending
+transitions:
+  - id: classify-task
+    source: request
+    target: route
+  - id: direct-response
+    source: route
+    target: respond
+    label: No tool needed
+    condition: 'toolRequired == false'
+  - id: plan-tool
+    source: route
+    target: plan
+    label: Tool needed
+    condition: 'toolRequired == true'
+  - id: execute-tool
+    source: plan
+    target: tool
+  - id: validate-tool
+    source: tool
+    target: validate
+  - id: accept-result
+    source: validate
+    target: respond
+    label: Accept
+    condition: 'resultValid == true'
+  - id: retry-plan
+    source: validate
+    target: plan
+    label: Retry
+    condition: 'resultValid == false and retryCount < 2'
+metadata:
+  category: example
+  scenario: agent

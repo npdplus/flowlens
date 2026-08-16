@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "0.1",
+  "name": "Malformed Transitions",
+  "steps": [{ "id": "start", "label": "Start" }],
+  "transitions": {}
+}

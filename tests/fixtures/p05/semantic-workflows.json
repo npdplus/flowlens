@@ -1,0 +1,187 @@
+{
+  "duplicate-step-id": {
+    "schemaVersion": "0.1",
+    "name": "Duplicate Step ID",
+    "steps": [
+      { "id": "same", "label": "First" },
+      { "id": "same", "label": "Second" }
+    ],
+    "transitions": []
+  },
+  "duplicate-transition-id": {
+    "schemaVersion": "0.1",
+    "name": "Duplicate Transition ID",
+    "steps": [
+      { "id": "start", "label": "Start", "type": "start" },
+      { "id": "end", "label": "End", "type": "end" }
+    ],
+    "transitions": [
+      { "id": "edge", "source": "start", "target": "end" },
+      { "id": "edge", "source": "start", "target": "end" }
+    ]
+  },
+  "unknown-source": {
+    "schemaVersion": "0.1",
+    "name": "Unknown Source",
+    "steps": [{ "id": "end", "label": "End", "type": "end" }],
+    "transitions": [{ "source": "missing", "target": "end" }]
+  },
+  "unknown-target": {
+    "schemaVersion": "0.1",
+    "name": "Unknown Target",
+    "steps": [{ "id": "start", "label": "Start", "type": "start" }],
+    "transitions": [{ "source": "start", "target": "missing" }]
+  },
+  "unreachable-step": {
+    "schemaVersion": "0.1",
+    "name": "Unreachable Step",
+    "steps": [
+      { "id": "start", "label": "Start", "type": "start" },
+      { "id": "end", "label": "End", "type": "end" },
+      { "id": "orphan", "label": "Orphan" }
+    ],
+    "transitions": [{ "source": "start", "target": "end" }]
+  },
+  "disconnected-component": {
+    "schemaVersion": "0.1",
+    "name": "Disconnected Component",
+    "steps": [
+      { "id": "a", "label": "A" },
+      { "id": "b", "label": "B", "type": "end" },
+      { "id": "c", "label": "C" },
+      { "id": "d", "label": "D", "type": "end" }
+    ],
+    "transitions": [
+      { "source": "a", "target": "b" },
+      { "source": "c", "target": "d" }
+    ]
+  },
+  "explicit-start-with-incoming": {
+    "schemaVersion": "0.1",
+    "name": "Start With Incoming",
+    "steps": [
+      { "id": "pre", "label": "Pre" },
+      { "id": "start", "label": "Start", "type": "start" },
+      { "id": "end", "label": "End", "type": "end" }
+    ],
+    "transitions": [
+      { "source": "pre", "target": "start" },
+      { "source": "start", "target": "end" }
+    ]
+  },
+  "explicit-end-with-outgoing": {
+    "schemaVersion": "0.1",
+    "name": "End With Outgoing",
+    "steps": [
+      { "id": "end", "label": "End", "type": "end" },
+      { "id": "next", "label": "Next" }
+    ],
+    "transitions": [{ "source": "end", "target": "next" }]
+  },
+  "decision-single-branch": {
+    "schemaVersion": "0.1",
+    "name": "Decision Single Branch",
+    "steps": [
+      { "id": "decision", "label": "Decision", "type": "decision" },
+      { "id": "end", "label": "End", "type": "end" }
+    ],
+    "transitions": [{ "source": "decision", "target": "end", "condition": "approved" }]
+  },
+  "dead-end": {
+    "schemaVersion": "0.1",
+    "name": "Dead End",
+    "steps": [
+      { "id": "start", "label": "Start", "type": "start" },
+      { "id": "dead", "label": "Dead" }
+    ],
+    "transitions": [{ "source": "start", "target": "dead" }]
+  },
+  "simple-cycle": {
+    "schemaVersion": "0.1",
+    "name": "Simple Cycle",
+    "steps": [
+      { "id": "a", "label": "A" },
+      { "id": "b", "label": "B" }
+    ],
+    "transitions": [
+      { "source": "a", "target": "b" },
+      { "source": "b", "target": "a" }
+    ]
+  },
+  "multi-node-cycle": {
+    "schemaVersion": "0.1",
+    "name": "Multi Node Cycle",
+    "steps": [
+      { "id": "a", "label": "A" },
+      { "id": "b", "label": "B" },
+      { "id": "c", "label": "C" }
+    ],
+    "transitions": [
+      { "source": "a", "target": "b" },
+      { "source": "b", "target": "c" },
+      { "source": "c", "target": "a" }
+    ]
+  },
+  "self-loop": {
+    "schemaVersion": "0.1",
+    "name": "Self Loop",
+    "steps": [{ "id": "retry", "label": "Retry" }],
+    "transitions": [{ "id": "retry-loop", "source": "retry", "target": "retry" }]
+  },
+  "multi-entry": {
+    "schemaVersion": "0.1",
+    "name": "Multi Entry",
+    "steps": [
+      { "id": "left", "label": "Left" },
+      { "id": "right", "label": "Right" },
+      { "id": "end", "label": "End", "type": "end" }
+    ],
+    "transitions": [
+      { "source": "left", "target": "end" },
+      { "source": "right", "target": "end" }
+    ]
+  },
+  "multi-terminal": {
+    "schemaVersion": "0.1",
+    "name": "Multi Terminal",
+    "steps": [
+      { "id": "start", "label": "Start", "type": "start" },
+      { "id": "left", "label": "Left", "type": "end" },
+      { "id": "right", "label": "Right", "type": "end" }
+    ],
+    "transitions": [
+      { "source": "start", "target": "left" },
+      { "source": "start", "target": "right" }
+    ]
+  },
+  "valid-sequential": {
+    "schemaVersion": "0.1",
+    "id": "valid-sequential",
+    "name": "Valid Sequential",
+    "steps": [
+      { "id": "start", "label": "Start", "type": "start" },
+      { "id": "review", "label": "Review" },
+      { "id": "end", "label": "End", "type": "end" }
+    ],
+    "transitions": [
+      { "id": "start-review", "source": "start", "target": "review" },
+      { "id": "review-end", "source": "review", "target": "end" }
+    ],
+    "metadata": { "fixture": "p05" }
+  },
+  "valid-decision": {
+    "schemaVersion": "0.1",
+    "name": "Valid Decision",
+    "steps": [
+      { "id": "start", "label": "Start", "type": "start" },
+      { "id": "decision", "label": "Decision", "type": "decision" },
+      { "id": "yes", "label": "Yes", "type": "end" },
+      { "id": "no", "label": "No", "type": "end" }
+    ],
+    "transitions": [
+      { "source": "start", "target": "decision" },
+      { "source": "decision", "target": "yes", "condition": "approved === true" },
+      { "source": "decision", "target": "no", "condition": "approved === false" }
+    ]
+  }
+}

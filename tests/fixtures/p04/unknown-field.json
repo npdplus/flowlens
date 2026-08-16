@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "0.1",
+  "name": "Unknown Fields",
+  "owner": "ignored-top-level",
+  "steps": [{ "id": "start", "label": "Start", "shape": "ignored-step-field" }],
+  "transitions": [{ "source": "start", "target": "start", "style": "ignored-transition-field" }]
+}

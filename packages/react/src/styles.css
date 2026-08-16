@@ -1,0 +1,243 @@
+@import '@xyflow/react/dist/style.css';
+
+.flowlens-diagram {
+  --flowlens-canvas: #f7f8fb;
+  --flowlens-surface: #ffffff;
+  --flowlens-text: #182230;
+  --flowlens-muted: #52606d;
+  --flowlens-border: #9aa6b2;
+  --flowlens-accent: #2855a7;
+  --flowlens-edge: #5a6876;
+  --flowlens-focus: #245edb;
+  --flowlens-status-neutral: #5f6b76;
+  --flowlens-status-pending: #5d6570;
+  --flowlens-status-active: #245edb;
+  --flowlens-status-success: #247346;
+  --flowlens-status-warning: #8a5b00;
+  --flowlens-status-failed: #b42318;
+  --flowlens-status-skipped: #667085;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  color: var(--flowlens-text);
+  background: var(--flowlens-canvas);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+}
+
+.flowlens-diagram[data-flowlens-theme='dark'],
+.flowlens-diagram__surface[data-flowlens-theme='dark'] {
+  --flowlens-canvas: #111827;
+  --flowlens-surface: #1f2937;
+  --flowlens-text: #f8fafc;
+  --flowlens-muted: #cbd5e1;
+  --flowlens-border: #64748b;
+  --flowlens-accent: #93b4ff;
+  --flowlens-edge: #a8b5c2;
+  --flowlens-focus: #9ec1ff;
+  --flowlens-status-neutral: #cbd5e1;
+  --flowlens-status-pending: #d1d5db;
+  --flowlens-status-active: #9ec1ff;
+  --flowlens-status-success: #7ee2a8;
+  --flowlens-status-warning: #ffd166;
+  --flowlens-status-failed: #ff9b91;
+  --flowlens-status-skipped: #cbd5e1;
+}
+
+.flowlens-diagram__surface {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  background: var(--flowlens-canvas);
+}
+
+.flowlens-diagram__loading,
+.flowlens-diagram__error {
+  display: grid;
+  min-height: 160px;
+  place-items: center;
+  padding: 1rem;
+  color: var(--flowlens-muted);
+  text-align: center;
+}
+
+.react-flow__node.flowlens-step {
+  border: 0;
+  background: transparent;
+  color: var(--flowlens-text);
+}
+
+.flowlens-step__frame {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 2px solid var(--flowlens-border);
+  border-radius: 14px;
+  background: var(--flowlens-surface);
+  box-shadow: 0 5px 16px rgb(15 23 42 / 12%);
+}
+
+.flowlens-step--start .flowlens-step__frame {
+  border-radius: 999px;
+}
+
+.flowlens-step--decision .flowlens-step__frame {
+  border-style: double;
+  border-width: 3px;
+}
+
+.flowlens-step--end .flowlens-step__frame {
+  border-width: 3px;
+}
+
+.flowlens-step__content {
+  box-sizing: border-box;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 0.85rem 1rem;
+}
+
+.flowlens-step__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.flowlens-step__type {
+  color: var(--flowlens-muted);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.flowlens-step__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--flowlens-status-neutral);
+  font-weight: 650;
+}
+
+.flowlens-step__status-symbol {
+  display: inline-grid;
+  width: 1rem;
+  height: 1rem;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+.flowlens-step--status-pending .flowlens-step__status {
+  color: var(--flowlens-status-pending);
+}
+
+.flowlens-step--status-active .flowlens-step__status {
+  color: var(--flowlens-status-active);
+}
+
+.flowlens-step--status-success .flowlens-step__status {
+  color: var(--flowlens-status-success);
+}
+
+.flowlens-step--status-warning .flowlens-step__status {
+  color: var(--flowlens-status-warning);
+}
+
+.flowlens-step--status-failed .flowlens-step__status {
+  color: var(--flowlens-status-failed);
+}
+
+.flowlens-step--status-skipped .flowlens-step__status {
+  color: var(--flowlens-status-skipped);
+}
+
+.flowlens-step__label {
+  overflow: hidden;
+  font-size: 1rem;
+  font-weight: 720;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.flowlens-step__description {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--flowlens-muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.flowlens-step__handle {
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--flowlens-surface);
+  background: var(--flowlens-accent);
+  pointer-events: none;
+}
+
+.react-flow__node.flowlens-step:focus-visible .flowlens-step__frame,
+.flowlens-step__frame.is-selected {
+  outline: 3px solid var(--flowlens-focus);
+  outline-offset: 3px;
+}
+
+.react-flow__edge.flowlens-transition .react-flow__edge-path {
+  stroke: var(--flowlens-edge);
+  stroke-width: 1.8;
+}
+
+.react-flow__edge.flowlens-transition.selected .react-flow__edge-path,
+.react-flow__edge.flowlens-transition:focus-visible .react-flow__edge-path {
+  stroke: var(--flowlens-focus);
+  stroke-width: 2.5;
+}
+
+.react-flow__edge-text {
+  fill: var(--flowlens-text);
+  font-size: 12px;
+}
+
+.react-flow__edge-textbg {
+  fill: var(--flowlens-surface);
+  fill-opacity: 0.94;
+}
+
+.react-flow__controls {
+  border: 1px solid var(--flowlens-border);
+  background: var(--flowlens-surface);
+  box-shadow: 0 4px 12px rgb(15 23 42 / 14%);
+}
+
+.react-flow__controls-button {
+  border-bottom-color: var(--flowlens-border);
+  background: var(--flowlens-surface);
+  color: var(--flowlens-text);
+}
+
+.react-flow__controls-button:focus-visible {
+  outline: 3px solid var(--flowlens-focus);
+  outline-offset: 1px;
+}
+
+.react-flow__controls-button svg {
+  fill: currentColor;
+}

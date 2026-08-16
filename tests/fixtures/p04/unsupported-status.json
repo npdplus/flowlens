@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "0.1",
+  "name": "Unsupported Status",
+  "steps": [{ "id": "start", "label": "Start", "status": "complete" }],
+  "transitions": []
+}

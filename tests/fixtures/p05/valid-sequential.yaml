@@ -1,0 +1,21 @@
+schemaVersion: '0.1'
+id: valid-sequential
+name: Valid Sequential
+steps:
+  - id: start
+    label: Start
+    type: start
+  - id: review
+    label: Review
+  - id: end
+    label: End
+    type: end
+transitions:
+  - id: start-review
+    source: start
+    target: review
+  - id: review-end
+    source: review
+    target: end
+metadata:
+  fixture: p05

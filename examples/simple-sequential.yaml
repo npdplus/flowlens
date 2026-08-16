@@ -1,0 +1,27 @@
+schemaVersion: '0.1'
+id: simple-sequential-workflow
+name: Simple Sequential Workflow
+description: A small synthetic workflow showing a straight-through process.
+steps:
+  - id: receive
+    label: Receive request
+    type: start
+    status: success
+  - id: process
+    label: Process request
+    type: action
+    status: active
+  - id: complete
+    label: Complete request
+    type: end
+    status: pending
+transitions:
+  - id: begin-processing
+    source: receive
+    target: process
+  - id: finish-processing
+    source: process
+    target: complete
+metadata:
+  category: example
+  scenario: sequential

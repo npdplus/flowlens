@@ -1,0 +1,6 @@
+{
+  "name": "",
+  "steps": [{ "label": "Missing ID", "status": "complete", "extra": true }],
+  "transitions": [{ "source": 42 }],
+  "metadata": []
+}

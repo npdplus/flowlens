@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node", "vitest/globals"]
+  },
+  "include": [
+    "vitest.config.ts",
+    "vitest.integration.config.ts",
+    "vitest.performance.config.ts",
+    "playwright.config.ts",
+    "playwright.release.config.ts",
+    "packages/**/*.test.ts",
+    "packages/**/*.test.tsx",
+    "packages/react/src/**/*.d.ts",
+    "apps/web/src/**/*.d.ts",
+    "apps/**/*.test.ts",
+    "apps/**/*.test.tsx",
+    "tests/integration/**/*.ts",
+    "tests/integration/**/*.tsx",
+    "tests/performance/**/*.ts",
+    "tests/release/**/*.ts",
+    "tests/e2e/**/*.ts"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "0.1",
+  "name": "Invalid Metadata",
+  "steps": [{ "id": "start", "label": "Start" }],
+  "transitions": [],
+  "metadata": ["metadata", "must", "be", "an", "object"]
+}

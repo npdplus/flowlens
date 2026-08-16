@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "0.1",
+  "name": "Unsupported Step Type",
+  "steps": [{ "id": "start", "label": "Start", "type": "trigger" }],
+  "transitions": []
+}

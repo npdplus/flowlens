@@ -1,0 +1,52 @@
+schemaVersion: '0.1'
+id: incident-response
+name: Incident Response
+description: Synthetic incident triage with severity-based response paths.
+steps:
+  - id: alert
+    label: Alert received
+    type: start
+    status: active
+  - id: triage
+    label: Assess severity
+    type: decision
+    status: active
+  - id: escalate
+    label: Escalate incident
+    type: action
+    status: warning
+  - id: remediate
+    label: Apply standard remediation
+    type: action
+    status: pending
+  - id: major-resolved
+    label: Major incident resolved
+    type: end
+    status: success
+  - id: standard-resolved
+    label: Incident resolved
+    type: end
+    status: success
+transitions:
+  - id: begin-triage
+    source: alert
+    target: triage
+  - id: major-path
+    source: triage
+    target: escalate
+    label: Major
+    condition: 'severity >= high'
+  - id: standard-path
+    source: triage
+    target: remediate
+    label: Standard
+    condition: 'severity < high'
+  - id: close-major
+    source: escalate
+    target: major-resolved
+  - id: close-standard
+    source: remediate
+    target: standard-resolved
+metadata:
+  category: example
+  scenario: incident-response

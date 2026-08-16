@@ -1,0 +1,5 @@
+{
+  "name": "Missing Schema Version",
+  "steps": [{ "id": "start", "label": "Start" }],
+  "transitions": []
+}

@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "0.1",
+  "name": "Minimal Valid",
+  "steps": [{ "id": "start", "label": "Start" }],
+  "transitions": []
+}

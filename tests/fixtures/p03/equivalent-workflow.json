@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "0.1",
+  "id": "golden-equivalence",
+  "name": "Golden Equivalence",
+  "description": "Equivalent JSON and YAML input",
+  "steps": [
+    {
+      "id": "start",
+      "label": "Start",
+      "type": "start",
+      "metadata": {
+        "owner": "labs"
+      }
+    },
+    {
+      "id": "review",
+      "label": "Review",
+      "status": "active"
+    },
+    {
+      "id": "done",
+      "label": "Done",
+      "type": "end"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "to-review",
+      "source": "start",
+      "target": "review",
+      "label": "Begin"
+    },
+    {
+      "source": "review",
+      "target": "done",
+      "condition": "approved === true",
+      "metadata": {
+        "path": "approved"
+      }
+    },
+    {
+      "source": "review",
+      "target": "done",
+      "condition": "approved === false",
+      "metadata": {
+        "path": "rejected"
+      }
+    }
+  ],
+  "metadata": {
+    "category": "synthetic",
+    "nested": {
+      "flags": [true, null, 2]
+    }
+  }
+}

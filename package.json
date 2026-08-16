@@ -1,0 +1,40 @@
+{
+  "name": "flowlens",
+  "version": "0.0.0",
+  "private": true,
+  "description": "FlowLens workflow validation, analysis, and visualization workspace",
+  "packageManager": "pnpm@11.4.0",
+  "engines": {
+    "node": ">=24.18.0 <25",
+    "pnpm": "11.4.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @flowlens/web dev",
+    "build": "pnpm --filter @flowlens/core build && pnpm --filter @flowlens/react build && pnpm --filter @flowlens/web build",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "pnpm --filter @flowlens/core typecheck && pnpm --filter @flowlens/react typecheck && pnpm --filter @flowlens/web typecheck && tsc -p tsconfig.tests.json --noEmit",
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:performance": "vitest run --config vitest.performance.config.ts",
+    "test:e2e": "playwright test",
+    "test:release:browsers": "playwright test --config playwright.release.config.ts",
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:integration && pnpm build && pnpm test:e2e"
+  },
+  "devDependencies": {
+    "@flowlens/core": "workspace:*",
+    "@flowlens/react": "workspace:*",
+    "@playwright/test": "1.60.0",
+    "@types/node": "24.12.4",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "eslint": "10.4.0",
+    "prettier": "3.9.6",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.65.0",
+    "vitest": "4.1.7"
+  }
+}
