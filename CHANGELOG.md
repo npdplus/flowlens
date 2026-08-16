@@ -4,7 +4,14 @@ All notable changes to FlowLens are documented in this file.
 
 ## [Unreleased]
 
-No unreleased product changes are recorded after the v0.1.1 release candidate.
+No unreleased product changes are recorded after the v0.1.2 release candidate.
+
+## [0.1.2]
+
+### Fixed
+
+- Normalize the standalone React Flow edge layer and its SVG children to the full workflow bounds so connector paths and transition labels retain their diagram positions in exported SVG and PNG output.
+- Add export regression coverage that verifies full edge-layer geometry and confirms connector pixels are present in the rasterized PNG artifact.
 
 ## [0.1.1]
 
