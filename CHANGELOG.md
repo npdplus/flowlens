@@ -4,7 +4,9 @@ All notable changes to FlowLens are documented in this file.
 
 ## [Unreleased]
 
-No unreleased product changes are recorded after the V0.1 release candidate.
+### Fixed
+
+- Preserve SVG edge-label transform attributes during standalone export so transition labels keep their diagram positions in both SVG and PNG output.
 
 ## [0.1.0]
 
