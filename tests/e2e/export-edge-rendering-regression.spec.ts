@@ -14,7 +14,7 @@ const selectExample = async (page: Page, label: string): Promise<void> => {
 };
 
 test('standalone export keeps connectors at full workflow bounds', async ({ page }) => {
-  await selectExample(page, 'Simple Sequential');
+  await selectExample(page, 'Simple Sequential Workflow');
 
   const [svgDownload] = await Promise.all([
     page.waitForEvent('download'),
