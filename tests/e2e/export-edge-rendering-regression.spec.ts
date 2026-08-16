@@ -13,7 +13,7 @@ const selectExample = async (page: Page, label: string): Promise<void> => {
   await expect(page.getByRole('region', { name: 'Workflow diagram' })).toBeVisible();
 };
 
-test('standalone SVG/PNG export keeps connector geometry at full workflow bounds', async ({ page }) => {
+test('standalone export keeps connectors at full workflow bounds', async ({ page }) => {
   await selectExample(page, 'Simple Sequential');
 
   const [svgDownload] = await Promise.all([
@@ -32,7 +32,9 @@ test('standalone SVG/PNG export keeps connector geometry at full workflow bounds
       (element): element is SVGSVGElement =>
         element.namespaceURI === 'http://www.w3.org/2000/svg' && element.localName === 'svg',
     );
-    const edgePaths = Array.from(document.querySelectorAll<SVGPathElement>('path.react-flow__edge-path'));
+    const edgePaths = Array.from(
+      document.querySelectorAll<SVGPathElement>('path.react-flow__edge-path'),
+    );
 
     return {
       viewportWidth: Number.parseFloat(viewport.style.width),
