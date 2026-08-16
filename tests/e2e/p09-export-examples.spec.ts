@@ -74,8 +74,9 @@ test('P09 Purchase Approval example remains editable and exports full local SVG 
   expect(png.length).toBeGreaterThan(1000);
 
   // Regression: computed-style inlining must not override React Flow's SVG
-  // transform attributes for edge-label wrappers. If those transforms collapse
-  // to `none`, all transition labels render at the export origin.
+  // transform attributes for edge-label wrappers. Validate actual exported
+  // geometry rather than browser-specific getComputedStyle reporting for SVG
+  // presentation attributes.
   await page.setContent(svg);
   const edgeLabelGeometry = await page
     .locator('g.react-flow__edge-textwrapper')
@@ -84,8 +85,10 @@ test('P09 Purchase Approval example remains editable and exports full local SVG 
         const bounds = element.getBoundingClientRect();
         return {
           transformAttribute: element.getAttribute('transform'),
-          computedTransform: getComputedStyle(element).transform,
+          x: bounds.x,
           y: bounds.y,
+          width: bounds.width,
+          height: bounds.height,
         };
       }),
     );
@@ -95,10 +98,9 @@ test('P09 Purchase Approval example remains editable and exports full local SVG 
       transformAttribute?.startsWith('translate('),
     ),
   ).toBe(true);
-  expect(edgeLabelGeometry.every(({ computedTransform }) => computedTransform !== 'none')).toBe(
-    true,
-  );
+  expect(edgeLabelGeometry.every(({ width, height }) => width > 0 && height > 0)).toBe(true);
   expect(new Set(edgeLabelGeometry.map(({ y }) => Math.round(y))).size).toBeGreaterThanOrEqual(3);
+  expect(new Set(edgeLabelGeometry.map(({ x }) => Math.round(x))).size).toBeGreaterThanOrEqual(2);
 
   expect(externalRequests).toEqual([]);
 });
