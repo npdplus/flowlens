@@ -10,8 +10,13 @@ import {
 } from 'react';
 import type { CanonicalWorkflow } from '@flowlens/core';
 import {
+  BaseEdge,
   Controls,
+  EdgeText,
+  getSmoothStepPath,
+  Position,
   ReactFlow,
+  type EdgeProps,
   type EdgeTypes,
   type NodeTypes,
   type ReactFlowInstance,
@@ -22,7 +27,6 @@ import { layoutWorkflow } from './layout';
 import { mapWorkflowToRenderer } from './mapping';
 import { selectionFromStepNode, selectionFromTransitionEdge } from './selection';
 import { FlowLensStepNodeComponent } from './step-node';
-import { FlowLensTransitionEdgeComponent } from './transition-edge';
 import type {
   FlowLensDiagramError,
   FlowLensDiagramHandle,
@@ -59,6 +63,63 @@ export const FLOWLENS_ARIA_LABEL_CONFIG = Object.freeze({
 const NODE_TYPES = Object.freeze({
   'flowlens-step': FlowLensStepNodeComponent,
 }) satisfies NodeTypes;
+
+const FLOWLENS_BRANCH_LABEL_OFFSET = 72;
+
+function FlowLensTransitionEdgeComponent({
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition = Position.Bottom,
+  targetPosition = Position.Top,
+  markerEnd,
+  style,
+  label,
+  labelStyle,
+  labelShowBg,
+  labelBgStyle,
+  labelBgPadding,
+  labelBgBorderRadius,
+  interactionWidth,
+}: EdgeProps<FlowLensTransitionEdge>) {
+  const [edgePath, labelX, labelY] = getSmoothStepPath({
+    sourceX,
+    sourceY,
+    sourcePosition,
+    targetX,
+    targetY,
+    targetPosition,
+  });
+  const horizontalDelta = targetX - sourceX;
+  const labelOffsetX =
+    Math.abs(horizontalDelta) < 1
+      ? 0
+      : Math.sign(horizontalDelta) * FLOWLENS_BRANCH_LABEL_OFFSET;
+
+  return (
+    <>
+      <BaseEdge
+        path={edgePath}
+        markerEnd={markerEnd}
+        style={style}
+        interactionWidth={interactionWidth}
+      />
+      {label === undefined || label === null ? null : (
+        <EdgeText
+          x={labelX + labelOffsetX}
+          y={labelY}
+          label={label}
+          labelStyle={labelStyle}
+          labelShowBg={labelShowBg}
+          labelBgStyle={labelBgStyle}
+          labelBgPadding={labelBgPadding}
+          labelBgBorderRadius={labelBgBorderRadius}
+        />
+      )}
+    </>
+  );
+}
 
 const EDGE_TYPES = Object.freeze({
   'flowlens-transition': FlowLensTransitionEdgeComponent,
