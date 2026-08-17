@@ -64,6 +64,13 @@ export function mapWorkflowToRenderer(
   layout: FlowLensLayoutSuccess,
 ): FlowLensRendererModel {
   const graphIndex = buildWorkflowGraphIndex(workflow);
+  const outgoingTransitionCounts = new Map<string, number>();
+  for (const transition of workflow.transitions) {
+    outgoingTransitionCounts.set(
+      transition.sourceStepId,
+      (outgoingTransitionCounts.get(transition.sourceStepId) ?? 0) + 1,
+    );
+  }
 
   const nodes = workflow.steps.map((step, index) => {
     const position = layout.positions.get(step.id);
@@ -134,11 +141,12 @@ export function mapWorkflowToRenderer(
         targetIndex === undefined
           ? missingEndpointId('target', index)
           : rendererNodeId(targetIndex),
-      type: 'smoothstep',
+      type: 'flowlens-transition' as const,
       data: {
         transitionId: transition.internalId,
         sourceStepId: transition.sourceStepId,
         targetStepId: transition.targetStepId,
+        branchLabelToTarget: (outgoingTransitionCounts.get(transition.sourceStepId) ?? 0) > 1,
         ...(transition.label === undefined ? {} : { label: transition.label }),
         ...(transition.condition === undefined ? {} : { condition: transition.condition }),
       },
