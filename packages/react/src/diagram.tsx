@@ -64,7 +64,7 @@ const NODE_TYPES = Object.freeze({
   'flowlens-step': FlowLensStepNodeComponent,
 }) satisfies NodeTypes;
 
-const FLOWLENS_BRANCH_LABEL_OFFSET = 72;
+const FLOWLENS_BRANCH_LABEL_OFFSET = 112;
 
 function FlowLensTransitionEdgeComponent({
   sourceX,
