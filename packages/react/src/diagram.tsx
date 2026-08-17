@@ -93,9 +93,7 @@ function FlowLensTransitionEdgeComponent({
   });
   const horizontalDelta = targetX - sourceX;
   const labelOffsetX =
-    Math.abs(horizontalDelta) < 1
-      ? 0
-      : Math.sign(horizontalDelta) * FLOWLENS_BRANCH_LABEL_OFFSET;
+    Math.abs(horizontalDelta) < 1 ? 0 : Math.sign(horizontalDelta) * FLOWLENS_BRANCH_LABEL_OFFSET;
 
   return (
     <>
