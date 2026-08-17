@@ -2,10 +2,13 @@ import { BaseEdge, getSmoothStepPath, type EdgeProps } from '@xyflow/react';
 
 import type { FlowLensTransitionEdge } from './types';
 
+const BRANCH_LABEL_CLEARANCE = 48;
+
 /**
  * Keeps normal transition labels at React Flow's smooth-step midpoint while
- * anchoring multi-way branch labels to each target column so sibling labels
- * do not collapse onto the same midpoint.
+ * anchoring multi-way branch labels to each target column and nudging outer
+ * branches away from the shared source axis so long sibling labels remain
+ * readable without changing connector geometry.
  */
 export function FlowLensTransitionEdgeComponent({
   sourceX,
@@ -34,7 +37,11 @@ export function FlowLensTransitionEdgeComponent({
     sourcePosition,
     targetPosition,
   });
-  const labelX = data?.branchLabelToTarget === true ? targetX : defaultLabelX;
+  const branchDirection = Math.sign(targetX - sourceX);
+  const labelX =
+    data?.branchLabelToTarget === true
+      ? targetX + branchDirection * BRANCH_LABEL_CLEARANCE
+      : defaultLabelX;
 
   return (
     <BaseEdge
