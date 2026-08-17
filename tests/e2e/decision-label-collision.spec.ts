@@ -1,5 +1,11 @@
 import { readFileSync } from 'node:fs';
-import { expect, test, type Download, type Locator, type Page } from '@playwright/test';
+import {
+  expect,
+  test,
+  type Download,
+  type Locator,
+  type Page,
+} from '@playwright/test';
 
 const downloadedText = async (download: Download): Promise<string> => {
   const path = await download.path();
@@ -10,12 +16,17 @@ const downloadedText = async (download: Download): Promise<string> => {
 const labelWrapper = (page: Page, text: string): Locator =>
   page.locator('g.react-flow__edge-textwrapper').filter({ hasText: text });
 
-const expectNoHorizontalOverlap = async (first: Locator, second: Locator): Promise<void> => {
+const expectNoHorizontalOverlap = async (
+  first: Locator,
+  second: Locator,
+): Promise<void> => {
   await expect(first).toHaveCount(1);
   await expect(second).toHaveCount(1);
   const firstBox = await first.boundingBox();
   const secondBox = await second.boundingBox();
-  if (firstBox === null || secondBox === null) throw new Error('Expected rendered edge-label bounds.');
+  if (firstBox === null || secondBox === null) {
+    throw new Error('Expected rendered edge-label bounds.');
+  }
 
   const left = firstBox.x <= secondBox.x ? firstBox : secondBox;
   const right = firstBox.x <= secondBox.x ? secondBox : firstBox;
