@@ -1,10 +1,4 @@
-import {
-  BaseEdge,
-  EdgeText,
-  getSmoothStepPath,
-  Position,
-  type EdgeProps,
-} from '@xyflow/react';
+import { BaseEdge, EdgeText, getSmoothStepPath, Position, type EdgeProps } from '@xyflow/react';
 
 import type { FlowLensTransitionEdge } from './types';
 
@@ -38,7 +32,9 @@ export function FlowLensTransitionEdgeComponent({
 
   const horizontalDelta = targetX - sourceX;
   const labelOffsetX =
-    Math.abs(horizontalDelta) < 1 ? 0 : Math.sign(horizontalDelta) * FLOWLENS_BRANCH_LABEL_OFFSET;
+    Math.abs(horizontalDelta) < 1
+      ? 0
+      : Math.sign(horizontalDelta) * FLOWLENS_BRANCH_LABEL_OFFSET;
 
   return (
     <>
