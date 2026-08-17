@@ -33,7 +33,7 @@ export interface FlowLensTransitionEdgeData extends Record<string, unknown> {
 }
 
 export type FlowLensStepNode = Node<FlowLensStepNodeData, 'flowlens-step'>;
-export type FlowLensTransitionEdge = Edge<FlowLensTransitionEdgeData>;
+export type FlowLensTransitionEdge = Edge<FlowLensTransitionEdgeData, 'flowlens-transition'>;
 
 export interface FlowLensDiagramBounds {
   readonly width: number;

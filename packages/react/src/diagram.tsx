@@ -9,7 +9,18 @@ import {
   type Ref,
 } from 'react';
 import type { CanonicalWorkflow } from '@flowlens/core';
-import { Controls, ReactFlow, type NodeTypes, type ReactFlowInstance } from '@xyflow/react';
+import {
+  BaseEdge,
+  Controls,
+  EdgeText,
+  getSmoothStepPath,
+  Position,
+  ReactFlow,
+  type EdgeProps,
+  type EdgeTypes,
+  type NodeTypes,
+  type ReactFlowInstance,
+} from '@xyflow/react';
 
 import { exportDiagramPng, exportDiagramSvg } from './export';
 import { layoutWorkflow } from './layout';
@@ -52,6 +63,65 @@ export const FLOWLENS_ARIA_LABEL_CONFIG = Object.freeze({
 const NODE_TYPES = Object.freeze({
   'flowlens-step': FlowLensStepNodeComponent,
 }) satisfies NodeTypes;
+
+const FLOWLENS_BRANCH_LABEL_OFFSET = 112;
+
+function FlowLensTransitionEdgeComponent({
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition = Position.Bottom,
+  targetPosition = Position.Top,
+  markerEnd,
+  style,
+  label,
+  labelStyle,
+  labelShowBg,
+  labelBgStyle,
+  labelBgPadding,
+  labelBgBorderRadius,
+  interactionWidth,
+}: EdgeProps<FlowLensTransitionEdge>) {
+  const [edgePath, labelX, labelY] = getSmoothStepPath({
+    sourceX,
+    sourceY,
+    sourcePosition,
+    targetX,
+    targetY,
+    targetPosition,
+  });
+  const horizontalDelta = targetX - sourceX;
+  const labelOffsetX =
+    Math.abs(horizontalDelta) < 1 ? 0 : Math.sign(horizontalDelta) * FLOWLENS_BRANCH_LABEL_OFFSET;
+
+  return (
+    <>
+      <BaseEdge
+        path={edgePath}
+        {...(markerEnd === undefined ? {} : { markerEnd })}
+        {...(style === undefined ? {} : { style })}
+        {...(interactionWidth === undefined ? {} : { interactionWidth })}
+      />
+      {label === undefined || label === null ? null : (
+        <EdgeText
+          x={labelX + labelOffsetX}
+          y={labelY}
+          label={label}
+          {...(labelStyle === undefined ? {} : { labelStyle })}
+          {...(labelShowBg === undefined ? {} : { labelShowBg })}
+          {...(labelBgStyle === undefined ? {} : { labelBgStyle })}
+          {...(labelBgPadding === undefined ? {} : { labelBgPadding })}
+          {...(labelBgBorderRadius === undefined ? {} : { labelBgBorderRadius })}
+        />
+      )}
+    </>
+  );
+}
+
+const EDGE_TYPES = Object.freeze({
+  'flowlens-transition': FlowLensTransitionEdgeComponent,
+}) satisfies EdgeTypes;
 
 const rendererFailure = (): FlowLensDiagramError => ({
   kind: 'renderer',
@@ -123,6 +193,7 @@ export function FlowLensDiagramSurface({
         nodes={nodes}
         edges={edges}
         nodeTypes={NODE_TYPES}
+        edgeTypes={EDGE_TYPES}
         colorMode={theme}
         fitView={initialFitView}
         fitViewOptions={{ padding: 0.16, minZoom: 0.2, maxZoom: 1.5 }}
