@@ -39,18 +39,18 @@ export function FlowLensTransitionEdgeComponent({
   return (
     <BaseEdge
       path={edgePath}
-      markerStart={markerStart}
-      markerEnd={markerEnd}
-      style={style}
-      label={label}
       labelX={labelX}
       labelY={labelY}
-      labelStyle={labelStyle}
-      labelShowBg={labelShowBg}
-      labelBgStyle={labelBgStyle}
-      labelBgPadding={labelBgPadding}
-      labelBgBorderRadius={labelBgBorderRadius}
-      interactionWidth={interactionWidth}
+      {...(markerStart === undefined ? {} : { markerStart })}
+      {...(markerEnd === undefined ? {} : { markerEnd })}
+      {...(style === undefined ? {} : { style })}
+      {...(label === undefined ? {} : { label })}
+      {...(labelStyle === undefined ? {} : { labelStyle })}
+      {...(labelShowBg === undefined ? {} : { labelShowBg })}
+      {...(labelBgStyle === undefined ? {} : { labelBgStyle })}
+      {...(labelBgPadding === undefined ? {} : { labelBgPadding })}
+      {...(labelBgBorderRadius === undefined ? {} : { labelBgBorderRadius })}
+      {...(interactionWidth === undefined ? {} : { interactionWidth })}
     />
   );
 }
