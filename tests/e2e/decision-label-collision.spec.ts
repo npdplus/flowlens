@@ -44,10 +44,15 @@ test('decision branch labels remain separated in the live diagram and standalone
     page.getByRole('button', { name: 'Export workflow diagram as SVG' }).click(),
   ]);
   const svg = await downloadedText(download);
-  await page.setContent(svg);
 
-  await expectNoHorizontalOverlap(
-    labelWrapper(page, approvedText),
-    labelWrapper(page, rejectedText),
-  );
+  const exportPage = await page.context().newPage();
+  try {
+    await exportPage.goto(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`);
+    await expectNoHorizontalOverlap(
+      labelWrapper(exportPage, approvedText),
+      labelWrapper(exportPage, rejectedText),
+    );
+  } finally {
+    await exportPage.close();
+  }
 });
