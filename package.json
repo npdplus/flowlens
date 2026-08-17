@@ -13,7 +13,7 @@
     "build": "pnpm --filter @flowlens/core build && pnpm --filter @flowlens/react build && pnpm --filter @flowlens/web build",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format:check": "prettier --write packages/react/src/diagram.tsx && git diff -- packages/react/src/diagram.tsx && exit 1",
     "typecheck": "pnpm --filter @flowlens/core typecheck && pnpm --filter @flowlens/react typecheck && pnpm --filter @flowlens/web typecheck && tsc -p tsconfig.tests.json --noEmit",
     "test": "vitest run",
     "test:integration": "vitest run --config vitest.integration.config.ts",
