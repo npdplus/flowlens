@@ -134,7 +134,7 @@ export function mapWorkflowToRenderer(
         targetIndex === undefined
           ? missingEndpointId('target', index)
           : rendererNodeId(targetIndex),
-      type: 'smoothstep',
+      type: 'flowlens-transition' as const,
       data: {
         transitionId: transition.internalId,
         sourceStepId: transition.sourceStepId,
