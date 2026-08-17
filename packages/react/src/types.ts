@@ -30,10 +30,11 @@ export interface FlowLensTransitionEdgeData extends Record<string, unknown> {
   readonly targetStepId: StepId;
   readonly label?: string;
   readonly condition?: string;
+  readonly branchLabelToTarget: boolean;
 }
 
 export type FlowLensStepNode = Node<FlowLensStepNodeData, 'flowlens-step'>;
-export type FlowLensTransitionEdge = Edge<FlowLensTransitionEdgeData>;
+export type FlowLensTransitionEdge = Edge<FlowLensTransitionEdgeData, 'flowlens-transition'>;
 
 export interface FlowLensDiagramBounds {
   readonly width: number;
@@ -46,15 +47,15 @@ export interface FlowLensLayoutSuccess {
   readonly bounds: FlowLensDiagramBounds;
 }
 
+export interface FlowLensLayoutFailure {
+  readonly ok: false;
+  readonly error: FlowLensDiagramError;
+}
+
 export interface FlowLensDiagramError {
   readonly kind: 'layout' | 'renderer';
   readonly code: 'layout-failed' | 'renderer-failed';
   readonly message: string;
-}
-
-export interface FlowLensLayoutFailure {
-  readonly ok: false;
-  readonly error: FlowLensDiagramError;
 }
 
 export type FlowLensLayoutResult = FlowLensLayoutSuccess | FlowLensLayoutFailure;
