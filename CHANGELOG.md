@@ -11,7 +11,9 @@ No unreleased product changes are recorded after the v0.1.2 release candidate.
 ### Fixed
 
 - Normalize the standalone React Flow edge layer and its SVG children to the full workflow bounds so connector paths and transition labels retain their diagram positions in exported SVG and PNG output.
-- Add export regression coverage that verifies full edge-layer geometry and confirms connector pixels are present in the rasterized PNG artifact.
+- Preserve nested SVG namespaces in standalone exports so React Flow connector paths remain SVG elements after XML serialization.
+- Anchor labels for multi-way outgoing branches to their target columns so sibling decision labels remain readable instead of sharing the same midpoint.
+- Add export regression coverage that verifies full edge-layer geometry, confirms connector pixels are present in the rasterized PNG artifact, and rejects overlapping Purchase Approval branch labels in both the live diagram and exported SVG.
 
 ## [0.1.1]
 
